@@ -103,12 +103,7 @@ pub fn create(config: Config) -> Result<(), Error> {
     ))?;
     write_resolvers(&mut resolver, model_name, plural_titled)?;
 
-    update_nav(
-        plural_titled,
-        model_name,
-        &config.section_plural,
-        &config.icon,
-    )?;
+    update_nav(plural_titled, model_name, &config.icon)?;
     update_routes(model_name, plural_titled, &config.section_plural)?;
     update_route_enums(model_name, &config.front_route, &config.api_route)?;
 
@@ -170,7 +165,7 @@ import {{
 import {{ FontDataRender }} from "../../../shared/models/basic/fonts.template.const";
 
 export const template: MainListTemplate = {{
-  headIcon: "fas fa-{icon} fa-2x ms-1 mt-1",
+  headIcon: "fas {icon} fa-2x ms-1 mt-1",
 }};
 
 export function setData(obj: {model}): ListTemplate {{
@@ -284,12 +279,7 @@ fn update_routes(model: &str, plural_titled: &str, section_plural: &str) -> Resu
     )
 }
 
-fn update_nav(
-    plural_titled: &str,
-    model: &str,
-    section_plural: &str,
-    icon: &str,
-) -> Result<(), Error> {
+fn update_nav(plural_titled: &str, model: &str, icon: &str) -> Result<(), Error> {
     let mut nav = OpenOptions::new().write(true).open("./src/app/_nav.ts")?;
     nav.seek(SeekFrom::End(-4))?;
     writeln!(
@@ -302,8 +292,8 @@ fn update_nav(
     children: [
       {{
         name: "{plural_titled}",
-        url: "{section_plural}/listar",
-        icon: "fa fa-{icon} scaling",
+        url: "${{RoutesEnum.{model}}}/listar",
+        icon: "fa {icon} scaling",
         class: "strong-font",
         active: RoutesEnum.{model},
       }},
