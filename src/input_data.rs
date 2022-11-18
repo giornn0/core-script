@@ -20,7 +20,7 @@ pub fn input_data(var: &mut String, label: &str, color: &Style, required: bool, 
     if var.len() < 3 && required {
         input_data(var, label, color, required, def);
     } else {
-        let lowered = var.to_lowercase();
+        let lowered = var.to_owned();
         var.clear();
         var.insert_str(0, lowered.as_str());
     }
